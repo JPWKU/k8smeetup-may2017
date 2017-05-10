@@ -21,7 +21,7 @@ export GCP_PROJECT=$(gcloud config list --format='value(core.project)')
 echo "Create cluster config for Asia-East-1"
 kubectl config use-context "gke_${GCP_PROJECT}_asia-east1-b_sockshop-asia"
 ASIA_SERVER_ADDRESS=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-cat > clusters/sockshop-asia.yaml <<EOF
+cat > ../clusters/sockshop-asia.yaml <<EOF
 apiVersion: federation/v1beta1
 kind: Cluster
 metadata:
@@ -37,7 +37,7 @@ kubectl config view --flatten --minify > kubeconfigs/sockshop-asia/kubeconfig
 echo "Create cluster config for Europe-West-1"
 kubectl config use-context "gke_${GCP_PROJECT}_europe-west1-b_sockshop-europe"
 EUROPE_SERVER_ADDRESS=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-cat > clusters/sockshop-europe.yaml <<EOF
+cat > ../clusters/sockshop-europe.yaml <<EOF
 apiVersion: federation/v1beta1
 kind: Cluster
 metadata:
@@ -53,7 +53,7 @@ kubectl config view --flatten --minify > kubeconfigs/sockshop-europe/kubeconfig
 echo "Create cluster config for US-Central-1"
 kubectl config use-context "gke_${GCP_PROJECT}_us-central1-b_sockshop-uscentral"
 US_CENTRAL_SERVER_ADDRESS=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-cat > clusters/sockshop-uscentral.yaml <<EOF
+cat > ../clusters/sockshop-uscentral.yaml <<EOF
 apiVersion: federation/v1beta1
 kind: Cluster
 metadata:
@@ -69,7 +69,7 @@ kubectl config view --flatten --minify > kubeconfigs/sockshop-uscentral/kubeconf
 echo "Create cluster config for US-Central-1"
 kubectl config use-context "gke_${GCP_PROJECT}_us-east1-b_sockshop-useast"
 US_EAST_SERVER_ADDRESS=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-cat > clusters/sockshop-useast.yaml <<EOF
+cat > ../clusters/sockshop-useast.yaml <<EOF
 apiVersion: federation/v1beta1
 kind: Cluster
 metadata:
@@ -113,13 +113,13 @@ echo "Waiting 60 seconds while the Federation controller becomes available"
 sleep 60
 # Add Clusters to Federation
 kubectl --context="gke_${GCP_PROJECT}_us-central1-b_sockshop-uscentral" --namespace=federation create secret generic sockshop-asia --from-file=kubeconfigs/sockshop-asia/kubeconfig
-kubectl --context=federation-cluster create -f clusters/sockshop-asia.yaml
+kubectl --context=federation-cluster create -f ../clusters/sockshop-asia.yaml
 kubectl --context="gke_${GCP_PROJECT}_us-central1-b_sockshop-uscentral" --namespace=federation create secret generic sockshop-europe --from-file=kubeconfigs/sockshop-europe/kubeconfig
-kubectl --context=federation-cluster create -f clusters/sockshop-europe.yaml
+kubectl --context=federation-cluster create -f ../clusters/sockshop-europe.yaml
 kubectl --context="gke_${GCP_PROJECT}_us-central1-b_sockshop-uscentral" --namespace=federation create secret generic sockshop-uscentral --from-file=kubeconfigs/sockshop-uscentral/kubeconfig
-kubectl --context=federation-cluster create -f clusters/sockshop-uscentral.yaml
+kubectl --context=federation-cluster create -f ../clusters/sockshop-uscentral.yaml
 kubectl --context="gke_${GCP_PROJECT}_us-central1-b_sockshop-uscentral" --namespace=federation create secret generic sockshop-useast --from-file=kubeconfigs/sockshop-useast/kubeconfig
-kubectl --context=federation-cluster create -f clusters/sockshop-useast.yaml
+kubectl --context=federation-cluster create -f ../clusters/sockshop-useast.yaml
 # Make some shortcuts for ease of use
 export ASIA=$(kubectl config get-contexts -o name | grep sockshop-asia)
 export EUROPE=$(kubectl config get-contexts -o name | grep sockshop-europe)
