@@ -1,0 +1,10 @@
+apiVersion: federation/v1beta1
+kind: Cluster
+metadata:
+  name: sockshop-europe
+spec:
+  serverAddressByClientCIDRs:
+    - clientCIDR: "0.0.0.0/0"
+      serverAddress: "https://130.211.86.12"
+  secretRef:
+    name: sockshop-europe
